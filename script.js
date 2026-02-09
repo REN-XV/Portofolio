@@ -13,7 +13,11 @@ document.querySelectorAll('.nav-links a').forEach(link => {
     });
 });
 
-// Form Submission
+// Inisialisasi EmailJS
+// GANTI dengan User ID Anda dari EmailJS
+emailjs.init("ZqbyRI9fO2sZu5NqT");
+
+// Form Submission dengan EmailJS
 document.getElementById('contactForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
@@ -22,20 +26,102 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     const email = document.getElementById('email').value;
     const subject = document.getElementById('subject').value;
     const message = document.getElementById('message').value;
+    const consent = document.getElementById('consent').checked;
     
     // Validate form
     if (!name || !email || !subject || !message) {
-        showNotification('Harap isi semua field!', 'error');
+        showFormMessage('Harap isi semua field yang wajib diisi!', 'error');
         return;
     }
     
-    // In a real application, you would send this data to a server
-    // For this example, we'll just show a success message
-    showNotification(`Terima kasih ${name}! Pesan Anda telah berhasil dikirim. Saya akan menghubungi Anda di ${email} segera.`, 'success');
+    if (!consent) {
+        showFormMessage('Anda harus menyetujui penggunaan data untuk komunikasi', 'error');
+        return;
+    }
     
-    // Reset form
-    this.reset();
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showFormMessage('Format email tidak valid!', 'error');
+        return;
+    }
+    
+    // Show loading state
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const btnLoader = submitBtn.querySelector('.btn-loader');
+    
+    btnText.style.display = 'none';
+    btnLoader.style.display = 'flex';
+    submitBtn.disabled = true;
+    
+    // Prepare template parameters
+    const templateParams = {
+        from_name: name,
+        from_email: email,
+        subject: subject,
+        message: message,
+        to_email: document.getElementById('my-email').textContent,
+        date: new Date().toLocaleString('id-ID')
+    };
+    
+    // GANTI dengan Service ID dan Template ID Anda dari EmailJS
+    const serviceID = 'service_njma58k';
+    const templateID = 'template_edmezqa';
+    
+    // Send email using EmailJS
+    emailjs.send(serviceID, templateID, templateParams)
+        .then(function(response) {
+            console.log('SUCCESS!', response.status, response.text);
+            showFormMessage('Pesan berhasil dikirim! Saya akan membalas email Anda segera.', 'success');
+            
+            // Reset form
+            document.getElementById('contactForm').reset();
+            
+            // Log to console for debugging
+            console.log('Email details:', {
+                from: email,
+                subject: subject,  
+                message: message.substring(0, 50) + '...'
+            });
+        }, function(error) {
+            console.log('FAILED...', error);
+            
+            // Fallback to alternative method if EmailJS fails
+            if (error.status === 0 || error.status >= 500) {
+                showFormMessage('Gagal mengirim pesan. Silakan coba lagi nanti atau hubungi langsung via email.', 'error');
+                // Show email address for direct contact
+                const myEmail = document.getElementById('my-email').textContent;
+                console.log(`Silakan hubungi langsung ke: ${myEmail}`);
+            } else {
+                showFormMessage('Terjadi kesalahan saat mengirim pesan. ' + error.text, 'error');
+            }
+        })
+        .finally(() => {
+            // Reset button state
+            btnText.style.display = 'block';
+            btnLoader.style.display = 'none';
+            submitBtn.disabled = false;
+        });
 });
+
+// Form message display
+function showFormMessage(message, type) {
+    const formMessage = document.getElementById('formMessage');
+    formMessage.textContent = message;
+    formMessage.className = `form-message ${type}`;
+    formMessage.style.display = 'block';
+    
+    // Auto hide success message after 5 seconds
+    if (type === 'success') {
+        setTimeout(() => {
+            formMessage.style.display = 'none';
+        }, 5000);
+    }
+    
+    // Scroll to form message
+    formMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
 
 // Notification function
 function showNotification(message, type) {
@@ -60,6 +146,9 @@ function showNotification(message, type) {
     if (type === 'success') {
         notification.style.backgroundColor = '#00ff9d';
         notification.style.color = '#000';
+    } else if (type === 'info') {
+        notification.style.backgroundColor = '#3498db';
+        notification.style.color = '#fff';
     } else {
         notification.style.backgroundColor = '#ff4757';
         notification.style.color = '#fff';
@@ -82,7 +171,7 @@ function showNotification(message, type) {
     }, 5000);
 }
 
-// Network Animation Canvas
+// Network Animation Canvas (tetap sama seperti sebelumnya)
 const canvas = document.getElementById('networkCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -274,6 +363,14 @@ function typeEffect() {
 // Start typing effect after page load
 window.addEventListener('load', () => {
     setTimeout(typeEffect, 500);
+    
+    // Initialize EmailJS with fallback message
+    console.log('EmailJS initialized. Form kontak siap digunakan.');
+    console.log('Untuk setup EmailJS:');
+    console.log('1. Daftar di https://www.emailjs.com');
+    console.log('2. Ganti ZqbyRI9fO2sZu5NqT dengan User ID Anda');
+    console.log('3. Ganti service_njma58k dengan Service ID Anda');
+    console.log('4. Ganti template_edmezqa dengan Template ID Anda');
 });
 
 // Image fallback for profile photo
@@ -282,4 +379,15 @@ profileImage.addEventListener('error', function() {
     // If local image fails to load, use a placeholder
     this.src = 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80';
     this.alt = 'Placeholder Network Engineer Image';
+});
+
+// Copy email to clipboard on click
+document.getElementById('my-email').addEventListener('click', function() {
+    const email = this.textContent;
+    navigator.clipboard.writeText(email).then(() => {
+        showNotification('Email berhasil disalin ke clipboard!', 'success');
+    }).catch(err => {
+        console.error('Gagal menyalin email: ', err);
+        showNotification('Gagal menyalin email', 'error');
+    });
 });

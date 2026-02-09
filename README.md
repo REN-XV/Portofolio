@@ -30,3 +30,26 @@ Website portofolio profesional untuk seorang Network Engineer dengan tema hitam 
 
 ## Struktur File
 # Portofolio
+
+# Setup Form Kontak dengan EmailJS
+
+## Langkah-langkah Setup:
+
+### 1. Daftar EmailJS Gratis
+1. Buka [https://www.emailjs.com](https://www.emailjs.com)
+2. Klik "Sign Up Free"
+3. Daftar dengan email Anda (mendukung 200 email/bulan gratis)
+
+### 2. Setup Service Email
+1. Setelah login, klik "Email Services" di sidebar
+2. Klik "Add New Service"
+3. Pilih penyedia email Anda (Gmail, Outlook, dll)
+4. Hubungkan dengan email Anda yang ingin menerima pesan
+5. Catat **Service ID** yang diberikan
+
+### 3. Buat Email Template
+1. Klik "Email Templates" di sidebar
+2. Klik "Create New Template"
+3. Buat template dengan konten seperti:
+
+**Subject:**

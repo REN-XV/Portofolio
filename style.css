@@ -811,3 +811,102 @@ footer {
         width: 100%;
     }
 }
+
+/* Tambahkan di bagian akhir style.css, sebelum media queries */
+
+/* Form Checkbox */
+.form-check {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.form-check-input {
+    margin-right: 10px;
+    margin-top: 5px;
+    accent-color: var(--accent);
+}
+
+.form-check-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* Form Message */
+.form-message {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: 500;
+    display: none;
+}
+
+.form-message.success {
+    background-color: rgba(0, 255, 157, 0.1);
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    display: block;
+}
+
+.form-message.error {
+    background-color: rgba(255, 71, 87, 0.1);
+    color: #ff4757;
+    border: 1px solid #ff4757;
+    display: block;
+}
+
+.form-message.info {
+    background-color: rgba(52, 152, 219, 0.1);
+    color: #3498db;
+    border: 1px solid #3498db;
+    display: block;
+}
+
+/* Button Loader */
+.btn-loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-loader i {
+    margin-right: 8px;
+}
+
+/* Email Note */
+.email-note {
+    margin-top: 30px;
+    padding: 15px;
+    background-color: rgba(0, 255, 157, 0.05);
+    border-radius: 5px;
+    border-left: 3px solid var(--accent);
+}
+
+.email-note p {
+    color: var(--accent-light);
+    font-size: 0.9rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.email-note i {
+    margin-right: 10px;
+    font-size: 1rem;
+}
+
+/* Email Credit */
+.email-credit {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.email-credit i {
+    margin-right: 5px;
+}

@@ -14,7 +14,7 @@
     <!-- Network Animation -->
     <canvas class="network-animation" id="networkCanvas"></canvas>
 
-    <!-- Header & Navigation -->
+     <!-- Header & Navigation -->
     <header>
         <div class="container nav-container">
             <a href="#" class="logo">
@@ -250,7 +250,7 @@
                             </div>
                             <div>
                                 <h4>Email</h4>
-                                <p>mohamadgalangarsya@gmail.com</p>
+                                <p id="my-email">mohamadgalangarsya@gmail.com</p>
                             </div>
                         </div>
                         
@@ -260,7 +260,7 @@
                             </div>
                             <div>
                                 <h4>Telepon</h4>
-                                <p>+62 895326332190</p>
+                                <p>+62 895 3263 32190</p>
                             </div>
                         </div>
                         
@@ -274,31 +274,51 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="email-note">
+                        <p><i class="fas fa-info-circle"></i> Pesan dari formulir akan langsung dikirim ke email saya.</p>
+                    </div>
                 </div>
                 
                 <div class="contact-form">
                     <form id="contactForm">
                         <div class="form-group">
-                            <label for="name">Nama Lengkap</label>
-                            <input type="text" id="name" class="form-control" required>
+                            <label for="name">Nama Lengkap *</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
                         </div>
                         
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" class="form-control" required>
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" class="form-control" required>
                         </div>
                         
                         <div class="form-group">
-                            <label for="subject">Subjek</label>
-                            <input type="text" id="subject" class="form-control" required>
+                            <label for="subject">Subjek *</label>
+                            <input type="text" id="subject" name="subject" class="form-control" required>
                         </div>
                         
                         <div class="form-group">
-                            <label for="message">Pesan</label>
-                            <textarea id="message" class="form-control" required></textarea>
+                            <label for="message">Pesan *</label>
+                            <textarea id="message" name="message" class="form-control" rows="5" required></textarea>
                         </div>
                         
-                        <button type="submit" class="submit-btn">Kirim Pesan</button>
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" id="consent" name="consent" class="form-check-input" required>
+                                <label for="consent" class="form-check-label">
+                                    Saya setuju data saya digunakan untuk keperluan komunikasi
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn" id="submitBtn">
+                            <span class="btn-text">Kirim Pesan</span>
+                            <span class="btn-loader" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i> Mengirim...
+                            </span>
+                        </button>
+                        
+                        <div id="formMessage" class="form-message"></div>
                     </form>
                 </div>
             </div>
@@ -331,11 +351,16 @@
             </div>
             
             <div class="copyright">
-                <p>&copy; 2026 Mohamad Galang Arsya. All rights reserved.</p>
+                <p>&copy; 2023 Muhammad Rizki. All rights reserved.</p>
+                <p class="email-credit">
+                    <i class="fas fa-envelope"></i> Email dikirim via EmailJS
+                </p>
             </div>
         </div>
     </footer>
 
+    <!-- Tambahkan script EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
