@@ -56,12 +56,13 @@ header {
 }
 
 .logo {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--accent);
     text-decoration: none;
     display: flex;
     align-items: center;
+}
+
+.logo img {
+    width: 3em;
 }
 
 .logo i {
@@ -762,6 +763,10 @@ footer {
         flex-direction: column;
         gap: 25px;
     }
+
+    .logo img {
+    width: 4em;
+}
     
     section {
         padding: 70px 0;
