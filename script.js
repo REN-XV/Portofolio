@@ -445,3 +445,59 @@ document.addEventListener('keydown', (e) => {
         closeCertModal();
     }
 });
+
+// Scroll Animation
+const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.15
+};
+
+const scrollObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+        }
+    });
+}, observerOptions);
+
+function initScrollAnimations() {
+    const animatedElements = [
+        '.section-title',
+        '.about-text',
+        '.skills',
+        '.project-card',
+        '.cert-card',
+        '.contact-info',
+        '.contact-form',
+        '.footer-content',
+        '.copyright',
+        '.hero-content h1',
+        '.hero-content h2',
+        '.hero-content p',
+        '.hero-buttons',
+        '.hero-stats',
+        '.image-container'
+    ];
+
+    animatedElements.forEach(selector => {
+        document.querySelectorAll(selector).forEach((el, index) => {
+            el.classList.add('animate-on-scroll');
+            // Add staggering delay for cards and hero elements
+            if (el.classList.contains('project-card') || el.classList.contains('cert-card')) {
+                el.style.transitionDelay = `${(index % 3) * 0.15}s`;
+            } else if (selector.startsWith('.hero-content') || selector === '.hero-buttons' || selector === '.hero-stats' || selector === '.image-container') {
+                // Hero elements
+                el.style.transitionDelay = `${index * 0.15}s`;
+            }
+            scrollObserver.observe(el);
+        });
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScrollAnimations);
+} else {
+    initScrollAnimations();
+}
