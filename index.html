@@ -177,56 +177,73 @@
                 <h2>Sertifikat</h2>
             </div>
             
-            <div class="certificates-container">
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 40px;">Sebagian pencapaian dan sertifikasi yang telah saya peroleh.</p>
+
+            <div class="cert-grid">
                 <!-- Certificate 1 -->
-                <div class="certificate-card">
-                    <div class="certificate-header">
-                        <div class="certificate-icon">
-                            <i class="fa-solid fa-network-wired"></i>
-                        </div>
-                        <div class="certificate-info">
-                            <h3>CCNP Enterprise</h3>
-                            <p>Cisco | 2022</p>
+                <div class="cert-card cert-modal-trigger" 
+                    data-title="CCNA By Coursera" 
+                    data-desc="Sertifikasi dasar jaringan komputer (Cisco Certified Network Associate) yang dipelajari melalui program Coursera. Sertifikasi ini memvalidasi dasar-dasar jaringan, akses jaringan, konektivitas IP, layanan IP, dasar-dasar keamanan, serta otomatisasi dan programabilitas." 
+                    data-pdf="images/CCNA_By_Coursera.pdf"
+                    data-img="https://images.unsplash.com/photo-1589330694653-ded6df03f754?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
+                    <img src="https://images.unsplash.com/photo-1589330694653-ded6df03f754?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="CCNA By Coursera">
+                    <div class="cert-overlay">
+                        <div class="cert-overlay-content">
+                            <i class="fas fa-search-plus"></i>
+                            <p>Klik Untuk Melihat Detail Selengkapnya</p>
                         </div>
                     </div>
-                    <div class="certificate-details">
-                        <p>Sertifikasi profesional Cisco untuk kemampuan merancang, mengimplementasikan, dan troubleshooting jaringan enterprise yang kompleks.</p>
-                    </div>
-                    <a href="#" class="certificate-link">Lihat Sertifikat <i class="fas fa-arrow-right"></i></a>
                 </div>
                 
                 <!-- Certificate 2 -->
-                <div class="certificate-card">
-                    <div class="certificate-header">
-                        <div class="certificate-icon">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <div class="certificate-info">
-                            <h3>CompTIA Security+</h3>
-                            <p>CompTIA | 2021</p>
+                <div class="cert-card cert-modal-trigger" 
+                    data-title="MTCNA Certificate" 
+                    data-desc="MikroTik Certified Network Associate (MTCNA). Sertifikasi yang memvalidasi kemampuan dasar dalam mengonfigurasi, mengelola, dan melakukan troubleshooting pada jaringan menggunakan router MikroTik RouterOS." 
+                    data-pdf="images/MTCNA.pdf"
+                    data-img="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
+                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="MTCNA Certificate">
+                    <div class="cert-overlay">
+                        <div class="cert-overlay-content">
+                            <i class="fas fa-search-plus"></i>
+                            <p>Klik Untuk Melihat Detail Selengkapnya</p>
                         </div>
                     </div>
-                    <div class="certificate-details">
-                        <p>Sertifikasi keamanan informasi global yang memvalidasi pengetahuan inti yang diperlukan untuk fungsi keamanan siber apa pun.</p>
-                    </div>
-                    <a href="#" class="certificate-link">Lihat Sertifikat <i class="fas fa-arrow-right"></i></a>
                 </div>
                 
                 <!-- Certificate 3 -->
-                <div class="certificate-card">
-                    <div class="certificate-header">
-                        <div class="certificate-icon">
-                            <i class="fas fa-cloud"></i>
-                        </div>
-                        <div class="certificate-info">
-                            <h3>AWS Certified Advanced Networking</h3>
-                            <p>Amazon Web Services | 2023</p>
+                <div class="cert-card cert-modal-trigger" 
+                    data-title="VIGI Certified Security Associate (VCSA)" 
+                    data-desc="Sertifikasi VIGI Certified Security Associate (VCSA) dari TP-Link. Menandakan tingkat keahlian dalam perancangan, implementasi, dan troubleshooting sistem kamera pengawas (CCTV) menggunakan ekosistem VIGI." 
+                    data-pdf="images/VCSA.pdf"
+                    data-img="https://images.unsplash.com/photo-1557200134-90327ee9fafa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
+                    <img src="https://images.unsplash.com/photo-1557200134-90327ee9fafa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="VIGI VCSA Certificate">
+                    <div class="cert-overlay">
+                        <div class="cert-overlay-content">
+                            <i class="fas fa-search-plus"></i>
+                            <p>Klik Untuk Melihat Detail Selengkapnya</p>
                         </div>
                     </div>
-                    <div class="certificate-details">
-                        <p>Sertifikasi yang memvalidasi keahlian dalam melakukan tugas jaringan yang kompleks pada platform AWS dan teknologi hibrid.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Certificate Modal -->
+        <div id="certDetailModal" class="cert-modal">
+            <div class="cert-modal-content">
+                <span class="cert-close-btn">&times;</span>
+                <div class="cert-detail-container">
+                    <div class="cert-detail-image">
+                        <img id="certModalImage" src="" alt="Detail Certificate">
                     </div>
-                    <a href="#" class="certificate-link">Lihat Sertifikat <i class="fas fa-arrow-right"></i></a>
+                    <div class="cert-detail-info">
+                        <h3 id="certModalTitle"></h3>
+                        <div class="cert-detail-desc">
+                            <p id="certModalDescription"></p>
+                        </div>
+                        <a href="javascript:void(0)" id="certModalPdfBtn" target="_blank" class="cert-pdf-btn">
+                            <i class="fas fa-file-pdf"></i> Lihat PDF Sertifikat
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

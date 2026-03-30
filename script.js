@@ -391,3 +391,57 @@ document.getElementById('my-email').addEventListener('click', function() {
         showNotification('Gagal menyalin email', 'error');
     });
 });
+
+// Certificate Modal Logic
+const certModal = document.getElementById('certDetailModal');
+const certCloseBtn = document.querySelector('.cert-close-btn');
+const certCards = document.querySelectorAll('.cert-modal-trigger');
+
+const certModalImage = document.getElementById('certModalImage');
+const certModalTitle = document.getElementById('certModalTitle');
+const certModalDescription = document.getElementById('certModalDescription');
+const certModalPdfBtn = document.getElementById('certModalPdfBtn');
+
+// Open Modal
+certCards.forEach(card => {
+    card.addEventListener('click', () => {
+        const title = card.getAttribute('data-title');
+        const desc = card.getAttribute('data-desc');
+        const pdfUrl = card.getAttribute('data-pdf');
+        const imgUrl = card.getAttribute('data-img');
+
+        // Populate modal data
+        certModalTitle.textContent = title;
+        certModalDescription.textContent = desc;
+        certModalPdfBtn.href = pdfUrl;
+        certModalImage.src = imgUrl;
+
+        // Show modal
+        certModal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    });
+});
+
+// Close Modal functionality
+const closeCertModal = () => {
+    certModal.classList.remove('active');
+    document.body.style.overflow = ''; // Restore scrolling
+};
+
+if (certCloseBtn) {
+    certCloseBtn.addEventListener('click', closeCertModal);
+}
+
+// Close when clicking outside modal content
+window.addEventListener('click', (e) => {
+    if (e.target === certModal) {
+        closeCertModal();
+    }
+});
+
+// Close on Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && certModal.classList.contains('active')) {
+        closeCertModal();
+    }
+});
