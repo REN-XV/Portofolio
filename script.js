@@ -171,138 +171,177 @@ function showNotification(message, type) {
     }, 5000);
 }
 
-// Network Animation Canvas (tetap sama seperti sebelumnya)
-const canvas = document.getElementById('networkCanvas');
-const ctx = canvas.getContext('2d');
+//========================================================
+// 3D Network Background with Three.js
+//========================================================
+let scene, camera, renderer, particles, linesRoot;
+const particleCount = 180;
+const maxConnectionDistance = 35;
+const container = document.getElementById('canvas-container');
 
-// Set canvas dimensions
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-
-// Initial resize
-resizeCanvas();
-
-// Nodes for network animation
-const nodes = [];
-const nodeCount = 40;
-
-// Create nodes
-for (let i = 0; i < nodeCount; i++) {
-    nodes.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        radius: Math.random() * 2 + 1,
-        speedX: (Math.random() - 0.5) * 0.7,
-        speedY: (Math.random() - 0.5) * 0.7,
-        color: `rgba(0, 255, 157, ${Math.random() * 0.5 + 0.1})`
-    });
-}
-
-// Draw network animation
-function drawNetwork() {
-    // Clear canvas with slight fade effect
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+function initThreeJS() {
+    scene = new THREE.Scene();
     
-    // Update and draw nodes
-    nodes.forEach(node => {
-        // Update position
-        node.x += node.speedX;
-        node.y += node.speedY;
+    camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 80;
+    
+    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    if(container) container.appendChild(renderer.domElement);
+    
+    const particleGeometry = new THREE.BufferGeometry();
+    const particlePositions = new Float32Array(particleCount * 3);
+    const particleSpeeds = [];
+
+    // Sphere distribution
+    for (let i = 0; i < particleCount * 3; i += 3) {
+        const r = 55 * Math.cbrt(Math.random());
+        const theta = Math.random() * 2 * Math.PI;
+        const phi = Math.acos(2 * Math.random() - 1);
         
-        // Bounce off edges
-        if (node.x < 0 || node.x > canvas.width) node.speedX *= -1;
-        if (node.y < 0 || node.y > canvas.height) node.speedY *= -1;
+        particlePositions[i] = r * Math.sin(phi) * Math.cos(theta); // x
+        particlePositions[i+1] = r * Math.sin(phi) * Math.sin(theta); // y
+        particlePositions[i+2] = r * Math.cos(phi); // z
         
-        // Keep within bounds
-        node.x = Math.max(0, Math.min(canvas.width, node.x));
-        node.y = Math.max(0, Math.min(canvas.height, node.y));
-        
-        // Draw node
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-        ctx.fillStyle = node.color;
-        ctx.fill();
-        
-        // Draw glow effect
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, node.radius * 2, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0, 255, 157, 0.05)`;
-        ctx.fill();
+        particleSpeeds.push({
+            x: (Math.random() - 0.5) * 0.05,
+            y: (Math.random() - 0.5) * 0.05,
+            z: (Math.random() - 0.5) * 0.05
+        });
+    }
+    
+    particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+    
+    const particleMaterial = new THREE.PointsMaterial({
+        color: 0x00FF9D, // Neon Green (matches logo/accent)
+        size: 0.9,
+        transparent: true,
+        opacity: 0.9,
+        blending: THREE.AdditiveBlending
     });
     
-    // Draw connections between nearby nodes
-    for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-            const dx = nodes[i].x - nodes[j].x;
-            const dy = nodes[i].y - nodes[j].y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+    particles = new THREE.Points(particleGeometry, particleMaterial);
+    scene.add(particles);
+    
+    linesRoot = new THREE.Group();
+    scene.add(linesRoot);
+    
+    // Parallax Interaction
+    let targetX = 0;
+    let targetY = 0;
+    
+    document.addEventListener('mousemove', (e) => {
+        targetX = (e.clientX - window.innerWidth / 2) * 0.001;
+        targetY = (e.clientY - window.innerHeight / 2) * 0.001;
+    });
+    
+    // Animate
+    function animateThreeJS() {
+        requestAnimationFrame(animateThreeJS);
+        
+        scene.rotation.x += (targetY - scene.rotation.x) * 0.05;
+        scene.rotation.y += (targetX - scene.rotation.y) * 0.05;
+        
+        // Auto slow rotation
+        scene.rotation.z += 0.0005;
+        scene.rotation.y += 0.001;
+
+        // Move particles slightly
+        const positions = particles.geometry.attributes.position.array;
+        for (let i = 0; i < particleCount; i++) {
+            const i3 = i * 3;
+            positions[i3] += particleSpeeds[i].x;
+            positions[i3+1] += particleSpeeds[i].y;
+            positions[i3+2] += particleSpeeds[i].z;
             
-            // Draw line if nodes are close enough
-            if (distance < 150) {
-                ctx.beginPath();
-                ctx.moveTo(nodes[i].x, nodes[i].y);
-                ctx.lineTo(nodes[j].x, nodes[j].y);
-                ctx.strokeStyle = `rgba(0, 255, 157, ${0.2 * (1 - distance/150)})`;
-                ctx.lineWidth = 0.5;
-                ctx.stroke();
+            // Constrain inside a radius sphere
+            const r2 = positions[i3]*positions[i3] + positions[i3+1]*positions[i3+1] + positions[i3+2]*positions[i3+2];
+            if(r2 > 3600) { // 60^2
+                particleSpeeds[i].x *= -1;
+                particleSpeeds[i].y *= -1;
+                particleSpeeds[i].z *= -1;
             }
         }
+        particles.geometry.attributes.position.needsUpdate = true;
+        
+        // Update connections
+        while(linesRoot.children.length > 0){ 
+            linesRoot.remove(linesRoot.children[0]); 
+        }
+        
+        const linePositions = [];
+        for (let i = 0; i < particleCount; i++) {
+            const i3 = i * 3;
+            for (let j = i + 1; j < particleCount; j++) {
+                const j3 = j * 3;
+                const dx = positions[i3] - positions[j3];
+                const dy = positions[i3+1] - positions[j3+1];
+                const dz = positions[i3+2] - positions[j3+2];
+                const distSq = dx*dx + dy*dy + dz*dz;
+                
+                if (distSq < maxConnectionDistance * maxConnectionDistance) {
+                    linePositions.push(positions[i3], positions[i3+1], positions[i3+2]);
+                    linePositions.push(positions[j3], positions[j3+1], positions[j3+2]);
+                }
+            }
+        }
+        
+        if(linePositions.length > 0) {
+            const geometry = new THREE.BufferGeometry();
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+            const lines = new THREE.LineSegments(geometry, new THREE.LineBasicMaterial({
+                color: 0x00CCFF, // Cyan lines connecting the green nodes
+                transparent: true,
+                opacity: 0.15,
+                blending: THREE.AdditiveBlending
+            }));
+            linesRoot.add(lines);
+        }
+        
+        renderer.render(scene, camera);
     }
     
-    // Draw some random data packets
-    if (Math.random() < 0.05) {
-        drawDataPacket();
+    // Connect GSAP scroll to rotate 3D element smoothly
+    if (typeof gsap !== 'undefined') {
+        gsap.to(scene.rotation, {
+            y: "+=" + Math.PI,
+            x: "+=" + Math.PI/4,
+            ease: "none",
+            scrollTrigger: {
+                trigger: "body",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 1.5
+            }
+        });
     }
     
-    // Continue animation
-    requestAnimationFrame(drawNetwork);
+    animateThreeJS();
 }
 
-// Draw random data packets
-function drawDataPacket() {
-    const startX = Math.random() * canvas.width;
-    const startY = Math.random() * canvas.height;
-    const endX = Math.random() * canvas.width;
-    const endY = Math.random() * canvas.height;
-    
-    // Animate packet
-    let progress = 0;
-    const packetRadius = 3;
-    
-    function animatePacket() {
-        progress += 0.02;
-        if (progress > 1) return;
-        
-        const x = startX + (endX - startX) * progress;
-        const y = startY + (endY - startY) * progress;
-        
-        // Draw packet
-        ctx.beginPath();
-        ctx.arc(x, y, packetRadius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0, 204, 255, 0.8)';
-        ctx.fill();
-        
-        // Draw trail
-        ctx.beginPath();
-        ctx.arc(x, y, packetRadius * 1.5, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0, 204, 255, 0.2)';
-        ctx.fill();
-        
-        requestAnimationFrame(animatePacket);
+function resizeThreeJS() {
+    if(camera && renderer) {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
     }
-    
-    animatePacket();
 }
 
-// Start animation
-drawNetwork();
+// Start ThreeJS
+window.addEventListener('load', () => {
+    try {
+        if (typeof THREE !== 'undefined') {
+            initThreeJS();
+        }
+    } catch(e) {
+        console.warn("Failed to init WebGL", e);
+    }
+});
 
 // Handle window resize
 window.addEventListener('resize', () => {
-    resizeCanvas();
+    resizeThreeJS();
 });
 
 // Smooth scrolling for anchor links
@@ -446,58 +485,74 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Scroll Animation
-const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.15
-};
+//========================================================
+// Advanced Interactions and Animations (GSAP, Vanilla Tilt)
+//========================================================
 
-const scrollObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target);
-        }
-    });
-}, observerOptions);
-
-function initScrollAnimations() {
-    const animatedElements = [
-        '.section-title',
-        '.about-text',
-        '.skills',
-        '.project-card',
-        '.cert-card',
-        '.contact-info',
-        '.contact-form',
-        '.footer-content',
-        '.copyright',
-        '.hero-content h1',
-        '.hero-content h2',
-        '.hero-content p',
-        '.hero-buttons',
-        '.hero-stats',
-        '.image-container'
-    ];
-
-    animatedElements.forEach(selector => {
-        document.querySelectorAll(selector).forEach((el, index) => {
-            el.classList.add('animate-on-scroll');
-            // Add staggering delay for cards and hero elements
-            if (el.classList.contains('project-card') || el.classList.contains('cert-card')) {
-                el.style.transitionDelay = `${(index % 3) * 0.15}s`;
-            } else if (selector.startsWith('.hero-content') || selector === '.hero-buttons' || selector === '.hero-stats' || selector === '.image-container') {
-                // Hero elements
-                el.style.transitionDelay = `${index * 0.15}s`;
-            }
-            scrollObserver.observe(el);
+// Ensure libraries are loaded
+window.addEventListener('load', () => {
+    // 1. Initialize 3D Hover Tilt Effects for Cards & Buttons
+    if (typeof VanillaTilt !== 'undefined') {
+        VanillaTilt.init(document.querySelectorAll(".project-card, .cert-card, .image-container, .contact-form, .contact-icon, .stat"), {
+            max: 12,
+            speed: 500,
+            glare: true,
+            "max-glare": 0.15,
+            perspective: 1200,
+            scale: 1.02
         });
-    });
-}
+    }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initScrollAnimations);
-} else {
-    initScrollAnimations();
-}
+    // 2. Initialize Premium Scroll Animations with GSAP
+    if (typeof gsap !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Define smooth reveal elements
+        const scrollElements = [
+            { s: '.section-title', y: 40, opt: 0 },
+            { s: '.about-text p, .about-text h3', y: 30, stg: 0.15 },
+            { s: '.skill-tag', sck: 0.8, y: 20, stg: 0.05 },
+            { s: '.project-card', y: 60, stg: 0.2 },
+            { s: '.cert-card', y: 60, stg: 0.2 },
+            { s: '.contact-info > *', x: -40, stg: 0.1 },
+            { s: '.contact-form', x: 40 }
+        ];
+
+        scrollElements.forEach(item => {
+            if(document.querySelector(item.s)) {
+                gsap.from(item.s, {
+                    scrollTrigger: {
+                        trigger: document.querySelector(item.s).parentElement, // Use parent to avoid sudden layout pop
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    },
+                    y: item.y || 0,
+                    x: item.x || 0,
+                    scale: item.sck || 1,
+                    opacity: 0,
+                    duration: 1.2,
+                    stagger: item.stg || 0,
+                    ease: "power3.out"
+                });
+            }
+        });
+
+        // Hero Parallax Elements on page load
+        gsap.from(".hero-content > *", {
+            y: 30, 
+            opacity: 0, 
+            duration: 1, 
+            stagger: 0.1, 
+            delay: 0.3, 
+            ease: "power3.out"
+        });
+        
+        gsap.from(".hero-image", {
+            scale: 0.9,
+            opacity: 0,
+            duration: 1.5,
+            delay: 0.5,
+            ease: "back.out(1.4)"
+        });
+    }
+});

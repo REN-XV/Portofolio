@@ -1,15 +1,15 @@
 /* Reset dan variabel warna */
 :root {
-    --primary: #000000;
-    --secondary: #121212;
-    --accent: #00ff9d;
-    --accent-dark: #00cc7d;
-    --accent-light: #33ffb1;
-    --text: #f0f0f0;
-    --text-secondary: #b0b0b0;
-    --card-bg: #1a1a1a;
-    --border: #333333;
-    --shadow: rgba(0, 255, 157, 0.1);
+    --primary: #030508; /* Deep dark blueish-black */
+    --secondary: #0A0F14; /* Dark blue-grey */
+    --accent: #00FF9D; /* Neon green (matches logo) */
+    --accent-dark: #00CC7D;
+    --accent-light: #33FFB1;
+    --text: #F0F4F8;
+    --text-secondary: #9BA9BA;
+    --card-bg: rgba(10, 15, 20, 0.65); /* Glassmorphism translucent */
+    --border: rgba(0, 255, 157, 0.2); /* Neon green tinted border */
+    --shadow: rgba(0, 0, 0, 0.6);
 }
 
 * {
@@ -28,6 +28,10 @@ body {
     color: var(--text);
     line-height: 1.6;
     overflow-x: hidden;
+}
+
+p {
+    text-align: justify;
 }
 
 .container {
@@ -116,7 +120,7 @@ header {
 /* Hero Section dengan foto di samping */
 .hero {
     padding: 150px 0 100px;
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(18, 18, 18, 0.9) 100%);
+    background: linear-gradient(135deg, rgba(5, 5, 8, 0.9) 0%, rgba(10, 15, 20, 0.9) 100%);
     position: relative;
     overflow: hidden;
 }
@@ -129,8 +133,8 @@ header {
     width: 100%;
     height: 100%;
     background: 
-        radial-gradient(circle at 20% 50%, rgba(0, 255, 157, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(0, 204, 255, 0.05) 0%, transparent 50%);
+        radial-gradient(circle at 20% 50%, rgba(0, 255, 157, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 204, 255, 0.08) 0%, transparent 50%);
     z-index: -1;
 }
 
@@ -177,34 +181,36 @@ header {
 
 .cta-button {
     display: inline-block;
-    background-color: var(--accent);
-    color: var(--primary);
+    background: linear-gradient(135deg, var(--accent), #00ccff);
+    color: #000000;
     padding: 14px 32px;
-    border-radius: 5px;
+    border-radius: 8px;
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 1.1rem;
-    transition: all 0.3s;
-    border: 2px solid var(--accent);
+    transition: all 0.3s ease;
+    border: none;
     text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 255, 157, 0.4);
 }
 
 .cta-button:hover {
-    background-color: transparent;
-    color: var(--accent);
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px var(--shadow);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 255, 157, 0.6);
 }
 
 .cta-button.secondary {
-    background-color: transparent;
-    color: var(--accent);
-    border-color: var(--accent);
+    background: rgba(10, 15, 20, 0.6);
+    color: var(--text);
+    border: 2px solid var(--accent);
+    backdrop-filter: blur(5px);
+    box-shadow: none;
 }
 
 .cta-button.secondary:hover {
-    background-color: var(--accent);
-    color: var(--primary);
+    background: var(--accent);
+    color: #000000;
+    box-shadow: 0 8px 20px rgba(0, 255, 157, 0.4);
 }
 
 .hero-stats {
@@ -291,7 +297,7 @@ header {
     border-radius: 30px;
     font-size: 0.85rem;
     font-weight: 600;
-    box-shadow: 0 4px 10px inset rgba(0, 0, 0, 0.5), 0 4px 15px rgba(0, 255, 157, 0.15);
+    box-shadow: 0 4px 10px inset rgba(0, 0, 0, 0.5), 0 4px 15px rgba(0, 255, 157, 0.2);
     backdrop-filter: blur(5px);
 }
 
@@ -326,6 +332,9 @@ section {
 }
 
 /* About Section */
+#about {
+    padding-bottom: 50px; /* Kurangi jarak bawah (mendekat ke projects) */
+}
 .about-content {
     display: flex;
     flex-direction: column;
@@ -375,6 +384,9 @@ section {
 }
 
 /* Projects Section */
+#projects {
+    padding-top: 50px; /* Kurangi jarak atas (mendekat ke about) */
+}
 .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -443,7 +455,7 @@ section {
 /* Certificates Section */
 .cert-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 30px;
 }
 
@@ -455,7 +467,8 @@ section {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     border: 1px solid var(--border);
     transition: transform 0.3s;
-    height: 250px;
+    aspect-ratio: 4 / 3;
+    height: auto;
 }
 
 .cert-card:hover {
@@ -641,7 +654,33 @@ section {
     box-shadow: 0 5px 15px var(--shadow);
 }
 
+@media (max-width: 992px) {
+    .cert-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
 @media (max-width: 768px) {
+    .cert-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px; /* Gap diperkecil agar pas pada layar paling kecil */
+    }
+    .cert-card {
+        aspect-ratio: 1.414 / 1; /* Rasio standar sertifikat agar proporsional */
+        height: auto;
+        border-radius: 6px; /* Radius sedikit disesuaikan untuk skala mobile */
+    }
+    .cert-overlay-content {
+        padding: 5px;
+    }
+    .cert-overlay-content i {
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+    }
+    .cert-overlay-content p {
+        font-size: 0.75rem; /* Diperkecil agar tak meluap */
+    }
     .cert-detail-container {
         flex-direction: column;
     }
@@ -902,11 +941,11 @@ footer {
     }
     
     .hero-content h1 {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
     }
     
     .hero-content h2 {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
     }
     
     .hero-buttons {
@@ -919,8 +958,14 @@ footer {
     }
     
     .hero-stats {
-        flex-direction: column;
-        gap: 25px;
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .stat h3 {
+        font-size: 2rem;
     }
 
     .logo img {
@@ -928,46 +973,72 @@ footer {
     }
     
     section {
-        padding: 70px 0;
+        padding: 60px 0;
+    }
+    
+    #about {
+        padding-bottom: 30px;
+    }
+    
+    #projects {
+        padding-top: 30px;
     }
     
     .section-title h2 {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
     
-    .projects-grid, .certificates-container {
-        grid-template-columns: 1fr;
+    .projects-grid {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 20px;
+        padding-bottom: 25px; /* Memberikan ruang ekstra untuk jarak bawah animasi */
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Menyembunyikan scrollbar di Firefox */
+    }
+    
+    .projects-grid::-webkit-scrollbar {
+        display: none; /* Menyembunyikan scrollbar di Chrome/Safari */
+    }
+    
+    .projects-grid .project-card {
+        flex: 0 0 calc(88% - 10px); /* 88% lebar membiarkan kotak proyek selanjutnya terlihat mengintip agar user tahu bisa digeser */
+        max-width: 360px;
+        scroll-snap-align: center;
     }
     
     .image-container {
-        width: 300px;
+        width: 280px;
         max-width: 100%;
-        height: 350px;
+        height: 320px;
     }
 }
 
 @media (max-width: 576px) {
     .hero-content h1 {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
     
     .hero-content h2 {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
 
     .hero-content p {
-        font-size: 1rem;
+        font-size: 0.95rem;
+        margin-bottom: 20px;
     }
     
     .cta-button {
-        padding: 12px 25px;
-        font-size: 1rem;
+        padding: 10px 20px;
+        font-size: 0.95rem;
     }
     
     .image-container {
-        width: 250px;
+        width: 240px;
         max-width: 100%;
-        height: 300px;
+        height: 280px;
     }
     
     .tech-tags {
@@ -975,40 +1046,134 @@ footer {
         justify-content: center;
         width: 100%;
         gap: 5px;
+        bottom: -20px;
     }
 
     .tech-tag {
-        padding: 6px 12px;
-        font-size: 0.8rem;
+        padding: 5px 10px;
+        font-size: 0.75rem;
+    }
+
+    .stat h3 {
+        font-size: 1.6rem;
+    }
+
+    .stat p {
+        font-size: 0.85rem;
+    }
+
+    .section-title h2 {
+        font-size: 1.5rem;
+    }
+
+    .section-title {
+        margin-bottom: 40px;
+    }
+
+    section {
+        padding: 40px 0;
+    }
+    
+    #about {
+        padding-bottom: 20px;
+    }
+    
+    #projects {
+        padding-top: 20px;
+    }
+
+    .about-text h3 {
+        font-size: 1.4rem;
+    }
+
+    .about-text p {
+        font-size: 0.95rem;
+    }
+
+    .skill-tag {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+
+    .project-img {
+        height: 180px;
+    }
+
+    .project-info {
+        padding: 20px;
+    }
+
+    .project-info h3 {
+        font-size: 1.3rem;
+    }
+
+    .project-info p {
+        font-size: 0.9rem;
+    }
+
+    /* Hapus paksa tinggi .cert-card agar rasio aspek pada layar kecil tetap proporsional (menggunakan fungsi bawaan grid 2x2 sebelumnya) */
+
+    .cert-modal-content {
+        padding: 20px;
+    }
+
+    .cert-detail-info h3 {
+        font-size: 1.3rem;
+    }
+
+    .cert-detail-desc {
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+    }
+
+    .cert-pdf-btn {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+
+    .contact-info h3 {
+        font-size: 1.5rem;
+    }
+
+    .contact-item h4 {
+        font-size: 1rem;
+    }
+
+    .contact-item p {
+        font-size: 0.9rem;
     }
 
     .contact-form {
         padding: 20px;
     }
-
-    .stat h3 {
-        font-size: 2rem;
-    }
 }
 
 @media (max-width: 400px) {
     .hero-content h1 {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
     }
     
     .section-title h2 {
-        font-size: 1.6rem;
+        font-size: 1.4rem;
     }
 
     .image-container {
-        width: 220px;
-        height: 270px;
+        width: 200px;
+        height: 240px;
     }
 
     .contact-icon {
         width: 40px;
         height: 40px;
         font-size: 1rem;
+    }
+
+    .hero-stats {
+        gap: 15px;
+    }
+
+    .stat h3 {
+        font-size: 1.4rem;
     }
 }
 
@@ -1111,15 +1276,22 @@ footer {
     margin-right: 5px;
 }
 
-/* Scroll Animations */
+/* Scroll Animations by GSAP */
 .animate-on-scroll {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s cubic-bezier(0.5, 0, 0, 1), transform 0.8s cubic-bezier(0.5, 0, 0, 1);
+    display: block; /* Kept for structural reasons but logic uses GSAP */
 }
 
-.animate-on-scroll.is-visible {
-    opacity: 1;
-    transform: translateY(0);
+/* Noise Canvas Overlay for Renaissance feel */
+.noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
 }
 

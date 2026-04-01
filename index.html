@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,23 +12,28 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="images/logo.png" />
 </head>
-<body>
-    <!-- Network Animation -->
-    <canvas class="network-animation" id="networkCanvas"></canvas>
 
-     <!-- Header & Navigation -->
+<body>
+    <!-- Noise canvas texture -->
+    <div class="noise-overlay"></div>
+
+    <!-- 3D Network WebGL Container -->
+    <div id="canvas-container" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></div>
+    <!-- Fallback canvas if WebGL fails -->
+    <canvas class="network-animation" id="networkCanvas" style="display: none;"></canvas>
+
+    <!-- Header & Navigation -->
     <header>
         <div class="container nav-container">
             <a href="#" class="logo">
                 <!-- <i class="fas fa-network-wired"></i> Network -->
-                <img src="/images/logo.png"
-                alt="">
+                <img src="/images/logo.png" alt="">
             </a>
-            
+
             <div class="menu-toggle" id="menuToggle">
                 <i class="fas fa-bars"></i>
             </div>
-            
+
             <ul class="nav-links" id="navLinks">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">Tentang</a></li>
@@ -42,9 +48,11 @@
     <section class="hero" id="home">
         <div class="container hero-container">
             <div class="hero-content">
-                <h1>Mohamad Galang Arsya</h1>
+                <h1>Moh. Galang Arsya</h1>
                 <h2>Network Engineer & Security Specialist</h2>
-                <p>Spesialis jaringan dengan pengalaman lebih dari 3 tahun dalam merancang, mengimplementasikan, dan mengamankan infrastruktur jaringan untuk perusahaan skala kecil hingga enterprise. Berfokus pada solusi jaringan yang andal, aman, dan scalable.</p>
+                <p>Spesialis jaringan dengan pengalaman lebih dari 3 tahun dalam merancang, mengimplementasikan, dan
+                    mengamankan infrastruktur jaringan untuk perusahaan skala kecil hingga enterprise. Berfokus pada
+                    solusi jaringan yang andal, aman, dan scalable.</p>
                 <div class="hero-buttons">
                     <a href="#projects" class="cta-button">Lihat Proyek Saya</a>
                     <a href="#contact" class="cta-button secondary">Hubungi Saya</a>
@@ -64,7 +72,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="hero-image">
                 <div class="image-container">
                     <img src="images/profile.jpg" alt="Foto Mohamd Galang Arsya" id="profileImage">
@@ -86,13 +94,19 @@
             <div class="section-title">
                 <h2>Tentang Saya</h2>
             </div>
-            
+
             <div class="about-content">
                 <div class="about-text">
                     <h3>Spesialis Jaringan Bersertifikasi Cisco, MikroTik & VIGI</h3>
-                    <p>Saya adalah seorang Network Engineer profesional yang memegang sertifikasi Cisco (CCNA), MikroTik (MTCNA), dan sistem keamanan fisik VIGI (VCSA). Saya memiliki rekam jejak yang terbukti dalam merancang topologi, mengonfigurasi perangkat jaringan tingkat enterprise, serta membangun pemantauan sistem pengawasan berskala besar.</p>
-                    <p>Sepanjang karir saya, saya telah dipercaya menangani berbagai proyek esensial pemerintah dan kepolisian, mulai dari instalasi *Core Switch* di berbagai satuan wilayah Polri, pengelolaan sistem *monitoring* JakWIFI (program layanan WiFi publik pemerintah), hingga instalasi ekosistem CCTV untuk area VVIP di Gelora Bung Karno (GBK).</p>
-                    
+                    <p>Saya adalah seorang Network Engineer profesional yang memegang sertifikasi Cisco (CCNA), MikroTik
+                        (MTCNA), dan sistem keamanan fisik VIGI (VCSA). Saya memiliki rekam jejak yang terbukti dalam
+                        merancang topologi, mengonfigurasi perangkat jaringan tingkat enterprise, serta membangun
+                        pemantauan sistem pengawasan berskala besar.</p>
+                    <p>Sepanjang karir saya, saya telah dipercaya menangani berbagai proyek esensial pemerintah dan
+                        kepolisian, mulai dari instalasi *Core Switch* di berbagai satuan wilayah Polri, pengelolaan
+                        sistem *monitoring* JakWIFI (program layanan WiFi publik pemerintah), hingga instalasi ekosistem
+                        CCTV untuk area VVIP di Gelora Bung Karno (GBK).</p>
+
                     <div class="skills">
                         <span class="skill-tag">Routing & Switching</span>
                         <span class="skill-tag">MikroTik RouterOS</span>
@@ -114,16 +128,19 @@
             <div class="section-title">
                 <h2>Proyek Saya</h2>
             </div>
-            
+
             <div class="projects-grid">
                 <!-- Project 1 -->
                 <div class="project-card">
                     <div class="project-img">
-                        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Instalasi Switch Kepolisian">
+                        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80"
+                            alt="Instalasi Switch Kepolisian">
                     </div>
                     <div class="project-info">
                         <h3>Instalasi Switch Kepolisian</h3>
-                        <p>Memimpin dan mengeksekusi instalasi serta konfigurasi perangkat Switch tingkat enterprise di tingkat Polres, Polresta, Polrestabes, hingga Polda untuk menjaga interkonektivitas dan keamanan topologi komunikasi data strategis.</p>
+                        <p>Memimpin dan mengeksekusi instalasi serta konfigurasi perangkat Switch tingkat enterprise di
+                            tingkat Polres, Polresta, Polrestabes, hingga Polda untuk menjaga interkonektivitas dan
+                            keamanan topologi komunikasi data strategis.</p>
                         <div class="project-tags">
                             <span class="project-tag">Routing & Switching</span>
                             <span class="project-tag">Cisco</span>
@@ -132,15 +149,18 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Project 2 -->
                 <div class="project-card">
                     <div class="project-img">
-                        <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Monitoring JakWIFI">
+                        <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80"
+                            alt="Monitoring JakWIFI">
                     </div>
                     <div class="project-info">
                         <h3>Monitoring JakWIFI Center</h3>
-                        <p>Berpartisipasi aktif dalam operasional sistem pemantauan (monitoring) infrastruktur JakWIFI—program layanan WiFi gratis dari pemerintah daerah. Memastikan alokasi ribuan titik *bandwidth* berjalan stabil dan meminimalisir persentase downtime.</p>
+                        <p>Berpartisipasi aktif dalam operasional sistem pemantauan (monitoring) infrastruktur
+                            JakWIFI—program layanan WiFi gratis dari pemerintah daerah. Memastikan alokasi ribuan titik
+                            *bandwidth* berjalan stabil dan meminimalisir persentase downtime.</p>
                         <div class="project-tags">
                             <span class="project-tag">MikroTik RouterOS</span>
                             <span class="project-tag">Bandwidth Management</span>
@@ -149,15 +169,18 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Project 3 -->
                 <div class="project-card">
                     <div class="project-img">
-                        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="CCTV Gelora Bung Karno">
+                        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80"
+                            alt="CCTV Gelora Bung Karno">
                     </div>
                     <div class="project-info">
                         <h3>Sistem IP CCTV Gelora Bung Karno</h3>
-                        <p>Melakukan deployment sistem kamera pengawas berbasis IP CCTV di area strategis Gelora Bung Karno (GBK). Mengonfigurasi NVR terpusat dengan manajemen port lalu lintas tinggi untuk akses keamanan pengawasan skala besar secara real-time.</p>
+                        <p>Melakukan deployment sistem kamera pengawas berbasis IP CCTV di area strategis Gelora Bung
+                            Karno (GBK). Mengonfigurasi NVR terpusat dengan manajemen port lalu lintas tinggi untuk
+                            akses keamanan pengawasan skala besar secara real-time.</p>
                         <div class="project-tags">
                             <span class="project-tag">VIGI Surveillance</span>
                             <span class="project-tag">IP Camera Setup</span>
@@ -176,16 +199,15 @@
             <div class="section-title">
                 <h2>Sertifikat</h2>
             </div>
-            
-            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 40px;">Sebagian pencapaian dan sertifikasi yang telah saya peroleh.</p>
+
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 40px;">Sebagian pencapaian dan
+                sertifikasi yang telah saya peroleh.</p>
 
             <div class="cert-grid">
                 <!-- Certificate 1 -->
-                <div class="cert-card cert-modal-trigger" 
-                    data-title="CCNA By Coursera" 
-                    data-desc="Sertifikasi dasar jaringan komputer (Cisco Certified Network Associate) yang dipelajari melalui program Coursera. Sertifikasi ini memvalidasi dasar-dasar jaringan, akses jaringan, konektivitas IP, layanan IP, dasar-dasar keamanan, serta otomatisasi dan programabilitas." 
-                    data-pdf="images/CCNA_By_Coursera.pdf"
-                    data-img="images/ccna-sertifikat.png">
+                <div class="cert-card cert-modal-trigger" data-title="CCNA By Coursera"
+                    data-desc="Sertifikasi dasar jaringan komputer (Cisco Certified Network Associate) yang dipelajari melalui program Coursera. Sertifikasi ini memvalidasi dasar-dasar jaringan, akses jaringan, konektivitas IP, layanan IP, dasar-dasar keamanan, serta otomatisasi dan programabilitas."
+                    data-pdf="images/CCNA_By_Coursera.pdf" data-img="images/ccna-sertifikat.png">
                     <img src="images/ccna-sertifikat.png" alt="CCNA By Coursera">
                     <div class="cert-overlay">
                         <div class="cert-overlay-content">
@@ -194,13 +216,11 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Certificate 2 -->
-                <div class="cert-card cert-modal-trigger" 
-                    data-title="MTCNA Certificate" 
-                    data-desc="MikroTik Certified Network Associate (MTCNA). Sertifikasi yang memvalidasi kemampuan dasar dalam mengonfigurasi, mengelola, dan melakukan troubleshooting pada jaringan menggunakan router MikroTik RouterOS." 
-                    data-pdf="images/MTCNA.pdf"
-                    data-img="images/mtcna-sertifikat.png">
+                <div class="cert-card cert-modal-trigger" data-title="MTCNA Certificate"
+                    data-desc="MikroTik Certified Network Associate (MTCNA). Sertifikasi yang memvalidasi kemampuan dasar dalam mengonfigurasi, mengelola, dan melakukan troubleshooting pada jaringan menggunakan router MikroTik RouterOS."
+                    data-pdf="images/MTCNA.pdf" data-img="images/mtcna-sertifikat.png">
                     <img src="images/mtcna-sertifikat.png" alt="MTCNA Certificate">
                     <div class="cert-overlay">
                         <div class="cert-overlay-content">
@@ -209,14 +229,25 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Certificate 3 -->
-                <div class="cert-card cert-modal-trigger" 
-                    data-title="VIGI Certified Security Associate (VCSA)" 
-                    data-desc="Sertifikasi VIGI Certified Security Associate (VCSA) dari TP-Link. Menandakan tingkat keahlian dalam perancangan, implementasi, dan troubleshooting sistem kamera pengawas (CCTV) menggunakan ekosistem VIGI." 
-                    data-pdf="images/VCSA.pdf"
-                    data-img="images/vcsa-sertifikat.png">
+                <div class="cert-card cert-modal-trigger" data-title="VIGI Certified Security Associate (VCSA)"
+                    data-desc="Sertifikasi VIGI Certified Security Associate (VCSA) dari TP-Link. Menandakan tingkat keahlian dalam perancangan, implementasi, dan troubleshooting sistem kamera pengawas (CCTV) menggunakan ekosistem VIGI."
+                    data-pdf="images/VCSA.pdf" data-img="images/vcsa-sertifikat.png">
                     <img src="images/vcsa-sertifikat.png" alt="VIGI VCSA Certificate">
+                    <div class="cert-overlay">
+                        <div class="cert-overlay-content">
+                            <i class="fas fa-search-plus"></i>
+                            <p>Klik Untuk Melihat Detail Selengkapnya</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certificate 4 -->
+                <div class="cert-card cert-modal-trigger" data-title="Jaringan Dasar (Fundamental)"
+                    data-desc="Sertifikasi mengenai Jaringan Dasar. Menunjukkan pemahaman kuat mengenai dasar-dasar perangkat keras jaringan, protokol komunikasi data, model referensi OSI, dan pengalamatan IPv4/IPv6 secara fundamental."
+                    data-pdf="images/Jaringan_Dasar.pdf" data-img="images/jaringan-sertifikat.png">
+                    <img src="images/jaringan-sertifikat.png" alt="Sertifikat Jaringan Dasar">
                     <div class="cert-overlay">
                         <div class="cert-overlay-content">
                             <i class="fas fa-search-plus"></i>
@@ -255,12 +286,14 @@
             <div class="section-title">
                 <h2>Kontak Saya</h2>
             </div>
-            
+
             <div class="contact-container">
                 <div class="contact-info">
                     <h3>Mari Berkolaborasi</h3>
-                    <p>Saya selalu terbuka untuk diskusi tentang proyek jaringan, konsultasi, atau peluang kolaborasi. Jangan ragu untuk menghubungi saya melalui formulir ini atau melalui informasi kontak di bawah.</p>
-                    
+                    <p>Saya selalu terbuka untuk diskusi tentang proyek jaringan, konsultasi, atau peluang kolaborasi.
+                        Jangan ragu untuk menghubungi saya melalui formulir ini atau melalui informasi kontak di bawah.
+                    </p>
+
                     <div class="contact-details">
                         <div class="contact-item">
                             <div class="contact-icon">
@@ -271,7 +304,7 @@
                                 <p id="my-email">mohamadgalangarsya@gmail.com</p>
                             </div>
                         </div>
-                        
+
                         <div class="contact-item">
                             <div class="contact-icon">
                                 <i class="fas fa-phone"></i>
@@ -281,7 +314,7 @@
                                 <p>+62 895 3263 32190</p>
                             </div>
                         </div>
-                        
+
                         <div class="contact-item">
                             <div class="contact-icon">
                                 <i class="fas fa-map-marker-alt"></i>
@@ -292,34 +325,35 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="email-note">
-                        <p><i class="fas fa-info-circle"></i> Pesan dari formulir akan langsung dikirim ke email saya.</p>
+                        <p><i class="fas fa-info-circle"></i> Pesan dari formulir akan langsung dikirim ke email saya.
+                        </p>
                     </div>
                 </div>
-                
+
                 <div class="contact-form">
                     <form id="contactForm">
                         <div class="form-group">
                             <label for="name">Nama Lengkap *</label>
                             <input type="text" id="name" name="name" class="form-control" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="email">Email *</label>
                             <input type="email" id="email" name="email" class="form-control" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="subject">Subjek *</label>
                             <input type="text" id="subject" name="subject" class="form-control" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="message">Pesan *</label>
                             <textarea id="message" name="message" class="form-control" rows="5" required></textarea>
                         </div>
-                        
+
                         <div class="form-group">
                             <div class="form-check">
                                 <input type="checkbox" id="consent" name="consent" class="form-check-input" required>
@@ -328,14 +362,14 @@
                                 </label>
                             </div>
                         </div>
-                        
+
                         <button type="submit" class="submit-btn" id="submitBtn">
                             <span class="btn-text">Kirim Pesan</span>
                             <span class="btn-loader" style="display: none;">
                                 <i class="fas fa-spinner fa-spin"></i> Mengirim...
                             </span>
                         </button>
-                        
+
                         <div id="formMessage" class="form-message"></div>
                     </form>
                 </div>
@@ -351,7 +385,7 @@
                     <i class="fas fa-network-wired"></i> NetworkPortfolio
                 </a>
                 <p>Spesialis Jaringan & Keamanan Siber</p>
-                
+
                 <div class="social-links">
                     <a href="#" class="social-link">
                         <i class="fab fa-linkedin-in"></i>
@@ -365,12 +399,13 @@
                     <a href="#" class="social-link">
                         <i class="fab fa-instagram"></i>
                     </a>
-                    <a href="https://api.whatsapp.com/send/?phone=62895326332190&text=Halo+Galang+Ganteng&type=phone_number&app_absent=0" class="social-link">
+                    <a href="https://api.whatsapp.com/send/?phone=62895326332190&text=Halo+Galang+Ganteng&type=phone_number&app_absent=0"
+                        class="social-link">
                         <i class="fa-brands fa-whatsapp"></i>
                     </a>
                 </div>
             </div>
-            
+
             <div class="copyright">
                 <p>&copy; 2026 Mohamad Galang Arsya. All rights reserved.</p>
                 <p class="email-credit">
@@ -380,8 +415,15 @@
         </div>
     </footer>
 
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+
     <!-- Tambahkan script EmailJS -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="script.js"></script>
 </body>
+
 </html>
