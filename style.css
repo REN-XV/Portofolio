@@ -991,10 +991,19 @@ footer {
     .projects-grid {
         display: flex;
         flex-wrap: nowrap;
+        /* Tetap gunakan overflow-x: auto agar bisa discroll */
         overflow-x: auto;
         scroll-snap-type: x mandatory;
         gap: 20px;
-        padding-bottom: 25px; /* Memberikan ruang ekstra untuk jarak bawah animasi */
+        
+        /* Trik Full-Bleed Layout agar kartu tidak terlihat terpotong kaku oleh batas container */
+        width: 100vw;
+        margin-left: -50vw;
+        left: 50%;
+        position: relative;
+        /* Kembalikan padding sesuai jarak container (5vw margin + 20px padding) */
+        padding: 0 calc(5vw + 20px) 25px calc(5vw + 20px); 
+        
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none; /* Menyembunyikan scrollbar di Firefox */
     }

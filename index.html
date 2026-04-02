@@ -103,8 +103,8 @@
                         merancang topologi, mengonfigurasi perangkat jaringan tingkat enterprise, serta membangun
                         pemantauan sistem pengawasan berskala besar.</p>
                     <p>Sepanjang karir saya, saya telah dipercaya menangani berbagai proyek esensial pemerintah dan
-                        kepolisian, mulai dari instalasi *Core Switch* di berbagai satuan wilayah Polri, pengelolaan
-                        sistem *monitoring* JakWIFI (program layanan WiFi publik pemerintah), hingga instalasi ekosistem
+                        kepolisian, mulai dari instalasi Switch di berbagai satuan wilayah Polri, pengelolaan
+                        sistem monitoring JAKWIFI (program layanan WiFi publik pemerintah), hingga instalasi ekosistem
                         CCTV untuk area VVIP di Gelora Bung Karno (GBK).</p>
 
                     <div class="skills">
@@ -346,7 +346,12 @@
 
                         <div class="form-group">
                             <label for="subject">Subjek *</label>
-                            <input type="text" id="subject" name="subject" class="form-control" required>
+                            <select id="subject" name="subject" class="form-control" required>
+                                <option value="" disabled selected>-- Pilih Subjek --</option>
+                                <option value="Konsultasi">Konsultasi</option>
+                                <option value="Rekrutmen">Rekrutmen</option>
+                                <option value="Pesan">Pesan</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
@@ -409,7 +414,7 @@
             <div class="copyright">
                 <p>&copy; 2026 Mohamad Galang Arsya. All rights reserved.</p>
                 <p class="email-credit">
-                    <i class="fas fa-envelope"></i> Email dikirim via EmailJS
+                    <i class="fas fa-envelope"></i> Sistem Kontak Langsung
                 </p>
             </div>
         </div>
@@ -421,8 +426,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
 
-    <!-- Tambahkan script EmailJS -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <!-- FormSubmit Handles Direct Emails -->
     <script src="script.js"></script>
 </body>
 

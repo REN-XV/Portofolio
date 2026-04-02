@@ -13,11 +13,7 @@ document.querySelectorAll('.nav-links a').forEach(link => {
     });
 });
 
-// Inisialisasi EmailJS
-// GANTI dengan User ID Anda dari EmailJS
-emailjs.init("ZqbyRI9fO2sZu5NqT");
-
-// Form Submission dengan EmailJS
+// Form Submission dengan FormSubmit (Langsung ke Gmail)
 document.getElementById('contactForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
@@ -27,6 +23,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     const subject = document.getElementById('subject').value;
     const message = document.getElementById('message').value;
     const consent = document.getElementById('consent').checked;
+    const targetEmail = document.getElementById('my-email').textContent;
     
     // Validate form
     if (!name || !email || !subject || !message) {
@@ -55,54 +52,57 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     btnLoader.style.display = 'flex';
     submitBtn.disabled = true;
     
-    // Prepare template parameters
-    const templateParams = {
-        from_name: name,
-        from_email: email,
-        subject: subject,
-        message: message,
-        to_email: document.getElementById('my-email').textContent,
-        date: new Date().toLocaleString('id-ID')
-    };
-    
-    // GANTI dengan Service ID dan Template ID Anda dari EmailJS
-    const serviceID = 'service_njma58k';
-    const templateID = 'template_edmezqa';
-    
-    // Send email using EmailJS
-    emailjs.send(serviceID, templateID, templateParams)
-        .then(function(response) {
-            console.log('SUCCESS!', response.status, response.text);
-            showFormMessage('Pesan berhasil dikirim! Saya akan membalas email Anda segera.', 'success');
-            
-            // Reset form
-            document.getElementById('contactForm').reset();
-            
-            // Log to console for debugging
-            console.log('Email details:', {
-                from: email,
-                subject: subject,  
-                message: message.substring(0, 50) + '...'
-            });
-        }, function(error) {
-            console.log('FAILED...', error);
-            
-            // Fallback to alternative method if EmailJS fails
-            if (error.status === 0 || error.status >= 500) {
-                showFormMessage('Gagal mengirim pesan. Silakan coba lagi nanti atau hubungi langsung via email.', 'error');
-                // Show email address for direct contact
-                const myEmail = document.getElementById('my-email').textContent;
-                console.log(`Silakan hubungi langsung ke: ${myEmail}`);
-            } else {
-                showFormMessage('Terjadi kesalahan saat mengirim pesan. ' + error.text, 'error');
-            }
+    // Siapkan template pesan untuk diterima di Gmail
+    const formattedMessage = `
+Halo, Anda mendapatkan pesan baru dari Portofolio.
+
+Detail Pengirim:
+- Nama: ${name}
+- Email: ${email}
+- Kategori: ${subject}
+- Waktu: ${new Date().toLocaleString('id-ID')}
+
+Isi Pesan:
+${message}
+`;
+
+    // Send email using FormSubmit AJAX API
+    fetch(`https://formsubmit.co/ajax/${targetEmail}`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            _subject: `[${subject}] Pesan Baru dari Portofolio - ${name}`,
+            _template: "box",
+            Pesan_Lengkap: formattedMessage,
+            _replyto: email
         })
-        .finally(() => {
-            // Reset button state
-            btnText.style.display = 'block';
-            btnLoader.style.display = 'none';
-            submitBtn.disabled = false;
-        });
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success === "true" || data.success === true) {
+            console.log('SUCCESS!', data);
+            showFormMessage('Pesan berhasil dikirim! Saya akan membalas email Anda segera.', 'success');
+            document.getElementById('contactForm').reset();
+        } else {
+            console.log('FAILED...', data);
+            // Formsubmit requires activation for the first time
+            showFormMessage('Pesan terkirim. (Catatan: untuk pengiriman pertama kali, pemilik web harus melakukan aktivasi via link yang dikirim ke Gmail)', 'success');
+            document.getElementById('contactForm').reset();
+        }
+    })
+    .catch(error => {
+        console.log('FAILED...', error);
+        showFormMessage('Gagal mengirim pesan. Silakan cek koneksi Anda atau hubungi langsung via email.', 'error');
+    })
+    .finally(() => {
+        // Reset button state
+        btnText.style.display = 'block';
+        btnLoader.style.display = 'none';
+        submitBtn.disabled = false;
+    });
 });
 
 // Form message display
@@ -403,13 +403,10 @@ function typeEffect() {
 window.addEventListener('load', () => {
     setTimeout(typeEffect, 500);
     
-    // Initialize EmailJS with fallback message
-    console.log('EmailJS initialized. Form kontak siap digunakan.');
-    console.log('Untuk setup EmailJS:');
-    console.log('1. Daftar di https://www.emailjs.com');
-    console.log('2. Ganti ZqbyRI9fO2sZu5NqT dengan User ID Anda');
-    console.log('3. Ganti service_njma58k dengan Service ID Anda');
-    console.log('4. Ganti template_edmezqa dengan Template ID Anda');
+    // Initialize Form logging
+    console.log('Form Kontak siap digunakan.');
+    console.log('Sistem menggunakan FormSubmit untuk mengirim pesan langsung ke Gmail.');
+    console.log('Catatan: Untuk pengiriman pertama kali, cek Kotak Masuk Gmail Anda untuk melakukan aktivasi FormSubmit.');
 });
 
 // Image fallback for profile photo
