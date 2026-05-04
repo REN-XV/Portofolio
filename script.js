@@ -227,21 +227,22 @@ function initThreeJS() {
     linesRoot = new THREE.Group();
     scene.add(linesRoot);
     
-    // Parallax Interaction
-    let targetX = 0;
-    let targetY = 0;
+    // Parallax Interaction dinonaktifkan atas permintaan (hanya scroll)
+    // let targetX = 0;
+    // let targetY = 0;
     
-    document.addEventListener('mousemove', (e) => {
-        targetX = (e.clientX - window.innerWidth / 2) * 0.001;
-        targetY = (e.clientY - window.innerHeight / 2) * 0.001;
-    });
+    // document.addEventListener('mousemove', (e) => {
+    //     targetX = (e.clientX - window.innerWidth / 2) * 0.001;
+    //     targetY = (e.clientY - window.innerHeight / 2) * 0.001;
+    // });
     
     // Animate
     function animateThreeJS() {
         requestAnimationFrame(animateThreeJS);
         
-        scene.rotation.x += (targetY - scene.rotation.x) * 0.05;
-        scene.rotation.y += (targetX - scene.rotation.y) * 0.05;
+        // Logika rotasi parallax dinonaktifkan
+        // scene.rotation.x += (targetY - scene.rotation.x) * 0.05;
+        // scene.rotation.y += (targetX - scene.rotation.y) * 0.05;
         
         // Auto slow rotation
         scene.rotation.z += 0.0005;
