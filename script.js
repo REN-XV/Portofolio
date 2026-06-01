@@ -534,7 +534,6 @@ window.addEventListener('load', () => {
         const scrollElements = [
             { s: '.section-title', y: 40, opt: 0 },
             { s: '.about-text p, .about-text h3', y: 30, stg: 0.15 },
-            { s: '.skill-tag', sck: 0.8, y: 20, stg: 0.05 },
             { s: '.project-card', y: 60, stg: 0.2 },
             { s: '.cert-card', y: 60, stg: 0.2 },
             { s: '.contact-info > *', x: -40, stg: 0.1 },

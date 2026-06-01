@@ -872,7 +872,7 @@ footer {
 /* Responsive Styles */
 @media (max-width: 1100px) {
     .hero-container {
-        flex-direction: column;
+        flex-direction: column-reverse; /* Profil di atas nama */
         text-align: center;
     }
     
@@ -889,7 +889,8 @@ footer {
     }
     
     .hero-image {
-        margin-top: 50px;
+        margin-top: 0;
+        margin-bottom: 40px;
     }
 }
 
@@ -991,29 +992,27 @@ footer {
     .projects-grid {
         display: flex;
         flex-wrap: nowrap;
-        /* Tetap gunakan overflow-x: auto agar bisa discroll */
         overflow-x: auto;
         scroll-snap-type: x mandatory;
         gap: 20px;
         
-        /* Trik Full-Bleed Layout agar kartu tidak terlihat terpotong kaku oleh batas container */
+        /* Trik Full-Bleed Layout */
         width: 100vw;
         margin-left: -50vw;
         left: 50%;
         position: relative;
-        /* Kembalikan padding sesuai jarak container (5vw margin + 20px padding) */
         padding: 0 calc(5vw + 20px) 25px calc(5vw + 20px); 
         
         -webkit-overflow-scrolling: touch;
-        scrollbar-width: none; /* Menyembunyikan scrollbar di Firefox */
+        scrollbar-width: none;
     }
     
     .projects-grid::-webkit-scrollbar {
-        display: none; /* Menyembunyikan scrollbar di Chrome/Safari */
+        display: none;
     }
     
     .projects-grid .project-card {
-        flex: 0 0 calc(88% - 10px); /* 88% lebar membiarkan kotak proyek selanjutnya terlihat mengintip agar user tahu bisa digeser */
+        flex: 0 0 calc(88% - 10px);
         max-width: 360px;
         scroll-snap-align: center;
     }
