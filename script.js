@@ -1,3 +1,6 @@
+// Global smooth scroll instance
+let lenis;
+
 // Mobile Menu Toggle
 const menuToggle = document.getElementById('menuToggle');
 const navLinks = document.getElementById('navLinks');
@@ -174,9 +177,10 @@ function showNotification(message, type) {
 //========================================================
 // 3D Network Background with Three.js
 //========================================================
-let scene, camera, renderer, particles, linesRoot;
+let scene, camera, renderer, particles, networkLines;
 const particleCount = 180;
 const maxConnectionDistance = 35;
+const maxConnections = 1500;
 const container = document.getElementById('canvas-container');
 
 function initThreeJS() {
@@ -224,8 +228,18 @@ function initThreeJS() {
     particles = new THREE.Points(particleGeometry, particleMaterial);
     scene.add(particles);
     
-    linesRoot = new THREE.Group();
-    scene.add(linesRoot);
+    // Pre-allocate buffer for connecting lines
+    const linePositions = new Float32Array(maxConnections * 2 * 3);
+    const lineGeometry = new THREE.BufferGeometry();
+    lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+    const lineMaterial = new THREE.LineBasicMaterial({
+        color: 0x00CCFF, // Cyan lines connecting the green nodes
+        transparent: true,
+        opacity: 0.15,
+        blending: THREE.AdditiveBlending
+    });
+    networkLines = new THREE.LineSegments(lineGeometry, lineMaterial);
+    scene.add(networkLines);
     
     // Parallax Interaction dinonaktifkan atas permintaan (hanya scroll)
     // let targetX = 0;
@@ -266,15 +280,14 @@ function initThreeJS() {
         }
         particles.geometry.attributes.position.needsUpdate = true;
         
-        // Update connections
-        while(linesRoot.children.length > 0){ 
-            linesRoot.remove(linesRoot.children[0]); 
-        }
+        // Update connections in place
+        const linePositionsAttr = networkLines.geometry.attributes.position.array;
+        let vertexIndex = 0;
         
-        const linePositions = [];
         for (let i = 0; i < particleCount; i++) {
             const i3 = i * 3;
             for (let j = i + 1; j < particleCount; j++) {
+                if (vertexIndex >= maxConnections * 2 * 3) break;
                 const j3 = j * 3;
                 const dx = positions[i3] - positions[j3];
                 const dy = positions[i3+1] - positions[j3+1];
@@ -282,23 +295,19 @@ function initThreeJS() {
                 const distSq = dx*dx + dy*dy + dz*dz;
                 
                 if (distSq < maxConnectionDistance * maxConnectionDistance) {
-                    linePositions.push(positions[i3], positions[i3+1], positions[i3+2]);
-                    linePositions.push(positions[j3], positions[j3+1], positions[j3+2]);
+                    linePositionsAttr[vertexIndex++] = positions[i3];
+                    linePositionsAttr[vertexIndex++] = positions[i3+1];
+                    linePositionsAttr[vertexIndex++] = positions[i3+2];
+                    
+                    linePositionsAttr[vertexIndex++] = positions[j3];
+                    linePositionsAttr[vertexIndex++] = positions[j3+1];
+                    linePositionsAttr[vertexIndex++] = positions[j3+2];
                 }
             }
         }
         
-        if(linePositions.length > 0) {
-            const geometry = new THREE.BufferGeometry();
-            geometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
-            const lines = new THREE.LineSegments(geometry, new THREE.LineBasicMaterial({
-                color: 0x00CCFF, // Cyan lines connecting the green nodes
-                transparent: true,
-                opacity: 0.15,
-                blending: THREE.AdditiveBlending
-            }));
-            linesRoot.add(lines);
-        }
+        networkLines.geometry.attributes.position.needsUpdate = true;
+        networkLines.geometry.setDrawRange(0, vertexIndex / 3);
         
         renderer.render(scene, camera);
     }
@@ -355,29 +364,45 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         
         const targetElement = document.querySelector(targetId);
         if (targetElement) {
-            window.scrollTo({
-                top: targetElement.offsetTop - 80,
-                behavior: 'smooth'
-            });
+            if (typeof lenis !== 'undefined' && lenis) {
+                lenis.scrollTo(targetElement, { offset: -80 });
+            } else {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            }
         }
     });
 });
 
-// Add active class to nav links on scroll
+// Add active class to nav links on scroll (Optimized to avoid layout thrashing)
 const sections = document.querySelectorAll('section');
 const navItems = document.querySelectorAll('.nav-links a');
+let sectionOffsets = [];
+
+function cacheSectionOffsets() {
+    sectionOffsets = Array.from(sections).map(section => ({
+        id: section.getAttribute('id'),
+        top: section.offsetTop,
+        height: section.clientHeight
+    }));
+}
+
+// Cache section offsets on page load and window resize
+window.addEventListener('load', cacheSectionOffsets);
+window.addEventListener('resize', cacheSectionOffsets);
 
 window.addEventListener('scroll', () => {
     let current = '';
+    const scrollPos = window.scrollY || window.pageYOffset;
     
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        
-        if (scrollY >= (sectionTop - 100)) {
-            current = section.getAttribute('id');
+    for (let i = 0; i < sectionOffsets.length; i++) {
+        const { id, top } = sectionOffsets[i];
+        if (scrollPos >= (top - 120)) {
+            current = id;
         }
-    });
+    }
     
     navItems.forEach(item => {
         item.classList.remove('active');
@@ -517,40 +542,166 @@ window.addEventListener('load', () => {
         ];
 
         scrollElements.forEach(item => {
-            if(document.querySelector(item.s)) {
-                gsap.from(item.s, {
-                    scrollTrigger: {
-                        trigger: document.querySelector(item.s).parentElement, // Use parent to avoid sudden layout pop
-                        start: "top 85%",
-                        toggleActions: "play none none reverse"
-                    },
-                    y: item.y || 0,
-                    x: item.x || 0,
-                    scale: item.sck || 1,
-                    opacity: 0,
-                    duration: 1.2,
-                    stagger: item.stg || 0,
+            const elements = document.querySelectorAll(item.s);
+            if (elements.length > 0) {
+                if (item.stg) {
+                    // Group elements by parent container to trigger stagger when their parent container enters
+                    const parents = new Set();
+                    elements.forEach(el => parents.add(el.parentElement));
+                    
+                    parents.forEach(parent => {
+                        const children = parent.querySelectorAll(item.s);
+                        gsap.from(children, {
+                            scrollTrigger: {
+                                trigger: parent,
+                                start: "top 85%",
+                                toggleActions: "play none none reverse"
+                            },
+                            y: item.y || 0,
+                            x: item.x || 0,
+                            scale: item.sck || 1,
+                            opacity: 0,
+                            duration: 1.0,
+                            stagger: item.stg || 0,
+                            ease: "power3.out"
+                        });
+                    });
+                } else {
+                    // Trigger individual elements (like section title)
+                    elements.forEach(el => {
+                        gsap.from(el, {
+                            scrollTrigger: {
+                                trigger: el,
+                                start: "top 85%",
+                                toggleActions: "play none none reverse"
+                            },
+                            y: item.y || 0,
+                            x: item.x || 0,
+                            scale: item.sck || 1,
+                            opacity: 0,
+                            duration: 1.0,
+                            ease: "power3.out"
+                        });
+                    });
+                }
+            }
+        });
+
+        // Hero animation will be triggered by Welcome Screen timeline
+    }
+});
+
+//========================================================
+// Smooth Scroll (Lenis), Custom Cursor & Preloader
+//========================================================
+window.addEventListener('DOMContentLoaded', () => {
+    // 1. Initialize Lenis Smooth Scroll
+    if (typeof Lenis !== 'undefined') {
+        lenis = new Lenis({
+            lerp: 0.1, // Faster and more responsive linear interpolation
+            wheelMultiplier: 1.0,
+            smoothWheel: true,
+            smoothTouch: false
+        });
+
+        // Integrate Lenis with GSAP ScrollTrigger
+        if (typeof gsap !== 'undefined') {
+            lenis.on('scroll', ScrollTrigger.update);
+            gsap.ticker.add((time) => {
+                lenis.raf(time * 1000);
+            });
+            gsap.ticker.lagSmoothing(0);
+        } else {
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+        }
+    }
+
+    // 2. Custom Cursor Logic
+    const cursorDot = document.querySelector('.cursor-dot');
+    const cursorOutline = document.querySelector('.cursor-outline');
+    
+    if (cursorDot && cursorOutline && window.matchMedia("(pointer: fine)").matches) {
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            if (typeof gsap !== 'undefined') {
+                gsap.to(cursorDot, {
+                    x: posX,
+                    y: posY,
+                    duration: 0.1,
+                    ease: "power2.out"
+                });
+                gsap.to(cursorOutline, {
+                    x: posX,
+                    y: posY,
+                    duration: 0.5,
+                    ease: "power2.out"
+                });
+            } else {
+                cursorDot.style.left = `${posX}px`;
+                cursorDot.style.top = `${posY}px`;
+                cursorOutline.style.left = `${posX}px`;
+                cursorOutline.style.top = `${posY}px`;
+            }
+        });
+
+        // Hover effects
+        const interactables = document.querySelectorAll('a, button, .cert-card, .project-card, .menu-toggle, input, textarea');
+        interactables.forEach(el => {
+            el.addEventListener('mouseenter', () => cursorOutline.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursorOutline.classList.remove('hover'));
+        });
+    }
+
+    // 3. Welcome Screen / Preloader Logic
+    const welcomeScreen = document.getElementById('welcome-screen');
+    const terminalText = document.getElementById('terminal-text');
+    
+    if (welcomeScreen && terminalText && typeof gsap !== 'undefined') {
+        gsap.registerPlugin(TextPlugin);
+        
+        // Prevent scrolling during boot
+        document.body.style.overflow = 'hidden';
+
+        const tl = gsap.timeline({
+            onComplete: () => {
+                document.body.style.overflow = '';
+                
+                // Trigger Hero animations after boot sequence
+                gsap.from(".hero-content > *", {
+                    y: 30, 
+                    opacity: 0, 
+                    duration: 1, 
+                    stagger: 0.1, 
                     ease: "power3.out"
+                });
+                gsap.from(".hero-image", {
+                    scale: 0.9,
+                    opacity: 0,
+                    duration: 1.5,
+                    ease: "back.out(1.4)"
                 });
             }
         });
 
-        // Hero Parallax Elements on page load
-        gsap.from(".hero-content > *", {
-            y: 30, 
-            opacity: 0, 
-            duration: 1, 
-            stagger: 0.1, 
-            delay: 0.3, 
-            ease: "power3.out"
-        });
-        
-        gsap.from(".hero-image", {
-            scale: 0.9,
-            opacity: 0,
-            duration: 1.5,
-            delay: 0.5,
-            ease: "back.out(1.4)"
+        // Terminal text typing effect
+        tl.to(terminalText, {
+            duration: 2.5,
+            text: "> Booting Network Protocol...<br>> Establishing Secure Connection...<br>> Access Granted.<br>> Welcome, Network Engineer.",
+            ease: "none",
+            delay: 0.5
+        })
+        // Slide up the welcome screen to reveal the page
+        .to(welcomeScreen, {
+            yPercent: -100,
+            duration: 1.2,
+            ease: "expo.inOut",
+            delay: 0.8
         });
     }
 });

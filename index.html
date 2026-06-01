@@ -14,6 +14,23 @@
 </head>
 
 <body>
+    <!-- Welcome Screen / Preloader -->
+    <div id="welcome-screen">
+        <div class="terminal-loader">
+            <div class="terminal-header">
+                <span class="terminal-button red"></span>
+                <span class="terminal-button yellow"></span>
+                <span class="terminal-button green"></span>
+                <span class="terminal-title">system_boot - root@network</span>
+            </div>
+            <div class="terminal-body" id="terminal-text"></div>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
     <!-- Noise canvas texture -->
     <div class="noise-overlay"></div>
 
@@ -99,7 +116,8 @@
                 <div class="about-text">
                     <h3>Spesialis Jaringan Bersertifikasi MikroTik & VIGI</h3>
                     <p>Saya adalah seorang Network Engineer profesional yang memegang sertifikasi MikroTik
-                        (MTCNA), sistem keamanan fisik VIGI (VCSA), Dan Beberapa Sertifikasi lain nya. Saya memiliki rekam jejak yang terbukti dalam
+                        (MTCNA), sistem keamanan fisik VIGI (VCSA), Dan Beberapa Sertifikasi lain nya. Saya memiliki
+                        rekam jejak yang terbukti dalam
                         merancang topologi, mengonfigurasi perangkat jaringan tingkat enterprise, serta membangun
                         pemantauan sistem pengawasan berskala besar.</p>
                     <p>Sepanjang karir saya, saya telah dipercaya menangani berbagai proyek esensial pemerintah dan
@@ -126,7 +144,7 @@
     <section id="projects">
         <div class="container">
             <div class="section-title">
-                <h2>Proyek Saya</h2>
+                <h2>Projects</h2>
             </div>
 
             <div class="projects-grid">
@@ -138,12 +156,12 @@
                     </div>
                     <div class="project-info">
                         <h3>Instalasi Switch Kepolisian</h3>
-                        <p>Memimpin dan mengeksekusi instalasi serta konfigurasi perangkat Switch tingkat enterprise di
+                        <p>Mengeksekusi instalasi serta konfigurasi perangkat Switch tingkat enterprise di
                             tingkat Polres, Polresta, Polrestabes, hingga Polda untuk menjaga interkonektivitas dan
                             keamanan topologi komunikasi data strategis.</p>
                         <div class="project-tags">
                             <span class="project-tag">Routing & Switching</span>
-                            <span class="project-tag">Cisco</span>
+                            <span class="project-tag">Cable Management</span>
                             <span class="project-tag">VLAN</span>
                         </div>
                     </div>
@@ -158,11 +176,12 @@
                     <div class="project-info">
                         <h3>Monitoring JakWIFI Center</h3>
                         <p>Berpartisipasi aktif dalam operasional sistem pemantauan (monitoring) infrastruktur
-                            JakWIFI—program layanan WiFi gratis dari pemerintah daerah. Memastikan alokasi ribuan titik
+                            JakWIFI—program layanan WiFi gratis dari pemerintah Provinsi DKI Jakarta. Memastikan alokasi
+                            ribuan titik
                             bandwidth berjalan stabil dan meminimalisir persentase downtime.</p>
                         <div class="project-tags">
-                            <span class="project-tag">MikroTik RouterOS</span>
-                            <span class="project-tag">Bandwidth Management</span>
+                            <span class="project-tag">Zabbix Cloud</span>
+                            <span class="project-tag">GDMS Cloud</span>
                             <span class="project-tag">Protokol Jaringan</span>
                             <span class="project-tag">Wireless</span>
                         </div>
@@ -192,12 +211,13 @@
                 <!-- Project 4 -->
                 <div class="project-card">
                     <div class="project-img">
-                        <img src="images/transdata.png"
-                            alt="Website PT. Transdata Global Network">
+                        <img src="images/transdata.png" alt="Website PT. Transdata Global Network">
                     </div>
                     <div class="project-info">
                         <h3>Website PT. Transdata Global Network</h3>
-                        <p>Merancang dan mengembangkan website company profile untuk PT. Transdata Global Network (transdata.co.id), sebuah perusahaan sistem integrator dan infrastruktur IT. Memastikan website menampilkan layanan perusahaan secara profesional dan responsif.</p>
+                        <p>Merancang dan mengembangkan website company profile untuk PT. Transdata Global Network
+                            (transdata.co.id), sebuah perusahaan sistem integrator dan infrastruktur IT. Memastikan
+                            website menampilkan layanan perusahaan secara profesional dan responsif.</p>
                         <div class="project-tags">
                             <span class="project-tag">Web Development</span>
                             <span class="project-tag">Company Profile</span>
@@ -209,12 +229,13 @@
                 <!-- Project 5 -->
                 <div class="project-card">
                     <div class="project-img">
-                        <img src="images/indoz.png"
-                            alt="Website PT. Tripali Global Indonesia">
+                        <img src="images/indoz.png" alt="Website PT. Tripali Global Indonesia">
                     </div>
                     <div class="project-info">
                         <h3>Website PT. Tripali Global Indonesia</h3>
-                        <p>Membangun website resmi untuk PT. Tripali Global Indonesia (indoz.co.id), perusahaan penyedia spare parts dan industrial seals. Website dirancang untuk memudahkan klien melihat katalog produk dan layanan industri berat.</p>
+                        <p>Membangun website resmi untuk PT. Tripali Global Indonesia (indoz.co.id), perusahaan penyedia
+                            spare parts dan industrial seals. Website dirancang untuk memudahkan klien melihat katalog
+                            produk dan layanan industri berat.</p>
                         <div class="project-tags">
                             <span class="project-tag">Web Development</span>
                             <span class="project-tag">Katalog Produk</span>
@@ -226,12 +247,13 @@
                 <!-- Project 6 -->
                 <div class="project-card">
                     <div class="project-img">
-                        <img src="images/optic.png"
-                            alt="Website Optickel">
+                        <img src="images/optic.png" alt="Website Optickel">
                     </div>
                     <div class="project-info">
                         <h3>Website Optickel</h3>
-                        <p>Mengembangkan website profil dan etalase produk untuk Optickel (optic.indoz.co.id), sebuah layanan penyedia kacamata dan lensa optik berkualitas. Mengoptimalkan antarmuka pengguna untuk mempermudah pemilihan produk kacamata.</p>
+                        <p>Mengembangkan website profil dan etalase produk untuk Optickel (optic.indoz.co.id), sebuah
+                            layanan penyedia kacamata dan lensa optik berkualitas. Mengoptimalkan antarmuka pengguna
+                            untuk mempermudah pemilihan produk kacamata.</p>
                         <div class="project-tags">
                             <span class="project-tag">Web Development</span>
                             <span class="project-tag">Profil Bisnis</span>
@@ -247,7 +269,7 @@
     <section id="certificates">
         <div class="container">
             <div class="section-title">
-                <h2>Sertifikat</h2>
+                <h2>Certificates</h2>
             </div>
 
             <p style="text-align: center; color: var(--text-secondary); margin-bottom: 40px;">Sebagian pencapaian dan
@@ -436,7 +458,8 @@
     <footer>
         <div class="container">
             <div class="footer-content">
-                <a href="https://lucid.app/lucidchart/ab75c12c-cec9-4534-be14-2e2960995ed0/edit?viewport_loc=-4260%2C-2773%2C9706%2C5802%2C0_0&invitationId=inv_8a9c6742-2b7c-4f74-8bd5-3781a8f3b458" class="logo">
+                <a href="https://lucid.app/lucidchart/ab75c12c-cec9-4534-be14-2e2960995ed0/edit?viewport_loc=-4260%2C-2773%2C9706%2C5802%2C0_0&invitationId=inv_8a9c6742-2b7c-4f74-8bd5-3781a8f3b458"
+                    class="logo">
                     <i class="fas fa-network-wired"></i> NetworkPortfolio
                 </a>
                 <p>Spesialis Jaringan & Keamanan Siber</p>
@@ -458,7 +481,8 @@
                         class="social-link">
                         <i class="fa-brands fa-whatsapp"></i>
                     </a>
-                    <a href="https://drive.google.com/drive/u/0/folders/1xSBQHIZFWgDzkozZyFzKMXOVM4qayasz" target="_blank" class="social-link">
+                    <a href="https://drive.google.com/drive/u/0/folders/1xSBQHIZFWgDzkozZyFzKMXOVM4qayasz"
+                        target="_blank" class="social-link">
                         <i class="fab fa-google-drive"></i>
                     </a>
                 </div>
@@ -477,7 +501,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 
     <!-- FormSubmit Handles Direct Emails -->
     <script src="script.js"></script>
